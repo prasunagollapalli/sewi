@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Auth Logic ---
   function checkAuth(isInitialLoad = false) {
     if (isInitialLoad) {
-      // Force reset to Home Page only on the very first load/refresh
+      // Force reset to Home Page ONLY on actual page refresh/load
       homePage.classList.remove('hidden');
       loginOverlay.classList.add('hidden');
       adminDashboard.classList.add('hidden');
@@ -135,8 +135,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const storedUsername = localStorage.getItem('currentUserName');
 
     if (isLoggedIn === 'true') {
+      // Hide login and home, show correct dashboard
       homePage.classList.add('hidden');
       loginOverlay.classList.add('hidden');
+      
       if (role === 'admin' || role === 'sender') {
         adminDashboard.classList.remove('hidden');
         renderAdminDashboard();
