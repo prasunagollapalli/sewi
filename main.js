@@ -209,14 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const username = e.target.username.value;
     const password = e.target.password.value;
 
-    if (role === 'admin') {
-      const { data: admin, error } = await supabase.from('admins').select('*').eq('username', username).eq('password', password).single(); if (admin) {
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('userRole', 'admin');
-        localStorage.setItem('currentUserName', admin.username);
-        homePage.classList.add('hidden'); loginOverlay.classList.add('hidden'); adminDashboard.classList.remove('hidden'); renderAdminDashboard();
-      } else {
-        loginError.innerText = "Invalid admin credentials";
+    if (role === 'admin') { try { const { data: admin, error } = await supabase.from('admins').select('*').eq('username', username).eq('password', password).single(); if (error) { if (error.code === 'PGRST116') { loginError.innerText = 'Invalid admin credentials'; } else { loginError.innerText = 'Supabase Error: ' + error.message; } } else if (admin) { localStorage.setItem('isLoggedIn', 'true'); localStorage.setItem('userRole', 'admin'); localStorage.setItem('currentUserName', admin.username); homePage.classList.add('hidden'); loginOverlay.classList.add('hidden'); adminDashboard.classList.remove('hidden'); renderAdminDashboard(); } } catch (err) { loginError.innerText = 'System Error: ' + err.message; } }
       }
     } else if (role === 'sender') {
       const userFound = await dbHelper.getUserDataBySender(username, password);
