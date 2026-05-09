@@ -365,10 +365,10 @@ document.addEventListener('DOMContentLoaded', () => {
       bgMusic.src = user.music_url;
     }
     
-    // Add Click listener to SeWi logos for redirect
     const handleLogoRedirect = (e) => {
         e.preventDefault();
-        navigateToPage('page-1');
+        // Redirect to Home page if you want, or just leave it for the burst effect
+        // navigateToPage('page-1');
     };
     
     if (siteLogo) siteLogo.onclick = handleLogoRedirect;
@@ -964,10 +964,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const randomSet = randomEmojiSets[Math.floor(Math.random() * randomEmojiSets.length)];
     createBurst(e.clientX, e.clientY, randomSet);
     
-    // Redirect to home if it's the logo
-    if (e.currentTarget.id === 'site-logo' || e.currentTarget.id === 'welcome-logo') {
-        navigateToPage('page-1');
-    }
+    // Redirect to home if it's the logo (Disabled as per request)
+    // if (e.currentTarget.id === 'site-logo' || e.currentTarget.id === 'welcome-logo') {
+    //     navigateToPage('page-1');
+    // }
   }
 
   if (siteLogo) siteLogo.addEventListener('click', handleBrandingClick);

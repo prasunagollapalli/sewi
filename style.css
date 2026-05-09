@@ -1608,3 +1608,12 @@ h3 {
   .cake { width: 180px !important; height: 140px !important; }
   .envelope-container { width: 220px !important; height: 150px !important; }
 }
+
+/* Fix for conclusion page button on mobile */
+.conclusion-nav {
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
+}
