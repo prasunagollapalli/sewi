@@ -1220,20 +1220,46 @@ h3 {
   display: none;
 }
 
-.preview-container {
+/* Conclusion Page Enhancements */
+.conclusion-container {
+  padding: 40px 20px;
+  max-height: 80vh;
+  overflow-y: auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 15px;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
+  gap: 20px;
 }
 
-.preview-img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+@media (max-width: 768px) {
+  .conclusion-container {
+    padding: 60px 20px;
+    justify-content: flex-start;
+  }
+  
+  #page-4 .nav-btn.prev-btn {
+    position: relative;
+    bottom: auto;
+    margin-top: 20px;
+  }
+}
+
+.preview-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 15px;
+  padding: 10px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.preview-wrapper {
+  transition: transform 0.2s;
+}
+
+.preview-wrapper:hover {
+  transform: translateY(-5px);
 }
 
 .music-preview {

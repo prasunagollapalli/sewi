@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getUserDataByReceiver(username, password) {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url)')
+        .select('*, memories(image_url, description)')
         .eq('receiver_username', username)
         .eq('receiver_password', password)
         .single();
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getUserDataBySender(username, password) {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url)')
+        .select('*, memories(image_url, description)')
         .eq('sender_username', username)
         .eq('sender_password', password)
         .single();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getAllUsersForAdmin() {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url)');
+        .select('*, memories(image_url, description)');
       if (error) throw error;
       return data;
     },
@@ -321,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.edit-user-btn').forEach(btn => {
             btn.addEventListener('click', async (e) => {
               const userId = e.target.getAttribute('data-id');
-              const { data: user } = await supabase.from('users').select('*, memories(image_url)').eq('id', userId).single();
+              const { data: user } = await supabase.from('users').select('*, memories(image_url, description)').eq('id', userId).single();
               if (user) loadUserForEditing(user);
             });
           });
@@ -516,6 +516,7 @@ document.addEventListener('DOMContentLoaded', () => {
       descInput.style.width = '100%';
       descInput.style.fontSize = '0.8rem';
       descInput.style.padding = '5px';
+      descInput.addEventListener('click', (e) => e.stopPropagation());
       descInput.addEventListener('input', (e) => {
         m.description = e.target.value;
       });
@@ -955,9 +956,21 @@ document.addEventListener('DOMContentLoaded', () => {
     createBurst(e.clientX, e.clientY, randomSet);
   }
 
-  if (siteLogo) siteLogo.addEventListener('click', handleBrandingClick);
+  if (siteLogo) {
+      siteLogo.addEventListener('click', (e) => {
+          handleBrandingClick(e);
+          handleLogout(); // Redirect to home/login
+      });
+  }
   if (welcomeTitle) welcomeTitle.addEventListener('click', handleBrandingClick);
   if (welcomeLogo) welcomeLogo.addEventListener('click', handleBrandingClick);
+
+  const homeBtn = document.getElementById('home-btn');
+  if (homeBtn) {
+      homeBtn.addEventListener('click', () => {
+          handleLogout(); // Return to start
+      });
+  }
 
   // --- Cake Intro Logic ---
   const cakeIntro = document.getElementById('cake-intro');
