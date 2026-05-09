@@ -1043,7 +1043,20 @@ document.addEventListener('DOMContentLoaded', () => {
   if (siteLogo) {
       siteLogo.addEventListener('click', (e) => {
           handleBrandingClick(e);
-          handleLogout(); // Redirect to home/login
+          // Instead of a full reload, let's just reset the UI state
+          localStorage.removeItem('isLoggedIn');
+          localStorage.removeItem('userRole');
+          localStorage.removeItem('currentUserName');
+          
+          // Hide everything
+          adminDashboard.classList.add('hidden');
+          loginOverlay.classList.add('hidden');
+          cakeIntro.classList.add('hidden');
+          
+          // Show home
+          homePage.classList.remove('hidden');
+          navigateToPage('page-1');
+          stopMusic();
       });
   }
   if (welcomeTitle) welcomeTitle.addEventListener('click', handleBrandingClick);
