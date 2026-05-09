@@ -210,10 +210,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const password = e.target.password.value;
 
     if (role === 'admin') {
-      if (username === 'admin' && password === 'admin') {
+      const { data: admin, error } = await supabase.from('admins').select('*').eq('username', username).eq('password', password).single(); if (admin) {
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('userRole', 'admin');
-        location.reload();
+        localStorage.setItem('currentUserName', admin.username);
+        homePage.classList.add('hidden'); loginOverlay.classList.add('hidden'); adminDashboard.classList.remove('hidden'); renderAdminDashboard();
       } else {
         loginError.innerText = "Invalid admin credentials";
       }
@@ -264,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userRole');
     localStorage.removeItem('currentUserName');
-    location.reload();
+    homePage.classList.add('hidden'); loginOverlay.classList.add('hidden'); adminDashboard.classList.remove('hidden'); renderAdminDashboard();
   }
 
   logoutBtn.addEventListener('click', handleLogout);
@@ -305,13 +306,26 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function renderUserList() {
+    adminDashboard.classList.remove('hidden');
     const userList = document.getElementById('user-list');
     if (userList) {
-      userList.innerHTML = '<p>Loading users...</p>';
+      userList.innerHTML = '<p>Loading admin panel...</p>';
       try {
         const users = await dbHelper.getAllUsersForAdmin();
         const totalUsers = users.length;
-        userList.innerHTML = `<div class="admin-stats" style="margin-bottom: 20px; padding: 10px; background: #f0f0f0; border-radius: 8px; font-weight: bold;">🌍 Total Users using SeWi: ${totalUsers}</div>`;
+        userList.innerHTML = `
+            <div class="admin-stats" style="margin-bottom: 20px; padding: 10px; background: #f0f0f0; border-radius: 8px; font-weight: bold;">🌍 Total Users using SeWi: ${totalUsers}</div>
+            
+            <!-- Admin Credentials Update Section -->
+            <div style="background: #fff3e0; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #ffe0b2;">
+                <h4 style="margin: 0 0 10px 0; color: #e65100;">🔐 Update Admin Credentials</h4>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <input type="text" id="new-admin-user" placeholder="New Admin Username" style="flex: 1; min-width: 150px; padding: 8px;">
+                    <input type="password" id="new-admin-pass" placeholder="New Admin Password" style="flex: 1; min-width: 150px; padding: 8px;">
+                    <button id="update-admin-btn" style="background: #e65100; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Update</button>
+                </div>
+            </div>
+        `;
         
         const list = document.createElement('ul');
         list.classList.add('user-list');
@@ -329,6 +343,30 @@ document.addEventListener('DOMContentLoaded', () => {
           list.appendChild(li);
         });
         userList.appendChild(list);
+
+        // Update Admin Credentials Logic
+        const updateAdminBtn = document.getElementById('update-admin-btn');
+        if (updateAdminBtn) {
+            updateAdminBtn.addEventListener('click', async () => {
+                const newUser = document.getElementById('new-admin-user').value.trim();
+                const newPass = document.getElementById('new-admin-pass').value.trim();
+                if (!newUser || !newPass) {
+                    alert("Please enter both new username and password");
+                    return;
+                }
+                const { error } = await supabase
+                    .from('admins')
+                    .update({ username: newUser, password: newPass })
+                    .eq('username', localStorage.getItem('currentUserName'));
+                
+                if (error) {
+                    alert("Error updating admin: " + error.message);
+                } else {
+                    localStorage.setItem('currentUserName', newUser);
+                    alert("Admin credentials updated successfully!");
+                }
+            });
+        }
 
         document.querySelectorAll('.delete-user-btn').forEach(btn => {
           btn.addEventListener('click', async (e) => {
@@ -501,7 +539,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await dbHelper.saveMemories(user.id, uploadedMemories);
 
       alert(`Saved configuration successfully!`);
-      location.reload();
+      homePage.classList.add('hidden'); loginOverlay.classList.add('hidden'); adminDashboard.classList.remove('hidden'); renderAdminDashboard();
     } catch (err) {
       alert("Error saving configuration! " + err.message);
       console.error(err);
