@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getUserDataByReceiver(username, password) {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url)')
+        .select('*, memories(image_url, description)')
         .eq('receiver_username', username)
         .eq('receiver_password', password)
         .single();
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getUserDataBySender(username, password) {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url)')
+        .select('*, memories(image_url, description)')
         .eq('sender_username', username)
         .eq('sender_password', password)
         .single();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getAllUsersForAdmin() {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url)');
+        .select('*, memories(image_url, description)');
       if (error) throw error;
       return data;
     },
@@ -360,13 +360,19 @@ document.addEventListener('DOMContentLoaded', () => {
     pendingMusicFile = null;
     pendingBgImageFile = null;
 
-    if (document.getElementById('music-preview')) {
-        document.getElementById('music-preview').innerHTML = user.music_url ? `Current Music: ${user.music_url.split('/').pop()} 🎵` : '';
+    // Update Music Source
+    if (user.music_url && bgMusic) {
+      bgMusic.src = user.music_url;
     }
     
-    if (document.getElementById('bg-preview')) {
-        document.getElementById('bg-preview').innerHTML = user.bg_image_url ? `Current Background: ${user.bg_image_url.split('/').pop()} 🖼️` : '';
-    }
+    // Add Click listener to SeWi logos for redirect
+    const handleLogoRedirect = (e) => {
+        e.preventDefault();
+        navigateToPage('page-1');
+    };
+    
+    if (siteLogo) siteLogo.onclick = handleLogoRedirect;
+    if (welcomeLogo) welcomeLogo.onclick = handleLogoRedirect;
 
     renderPreviews();
 
@@ -516,6 +522,12 @@ document.addEventListener('DOMContentLoaded', () => {
       descInput.style.width = '100%';
       descInput.style.fontSize = '0.8rem';
       descInput.style.padding = '5px';
+      
+      // STOP CLICK FROM OPENING FILE SELECT
+      descInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+      });
+      
       descInput.addEventListener('input', (e) => {
         m.description = e.target.value;
       });
@@ -941,18 +953,21 @@ document.addEventListener('DOMContentLoaded', () => {
   const siteLogo = document.getElementById('site-logo');
   const welcomeTitle = document.getElementById('welcome-title');
   const welcomeLogo = document.getElementById('welcome-logo');
-  const randomEmojiSets = [
-    ['🦄', '🌈', '✨', '🍭'],
-    ['🐯', '🦁', '🐻', '🐼'],
-    ['🍎', '🍓', '🍒', '🍉'],
-    ['⚽', '🏀', '🏈', '⚾'],
-    ['😀', '😂', '😎', '😍'],
-    ['🚀', '🛸', '⭐', '🌌']
-  ];
 
   function handleBrandingClick(e) {
+    const randomEmojiSets = [
+      ['🦄', '🌈', '✨', '🍭'],
+      ['🐯', '🦁', '🐻', '🐼'],
+      ['🍎', '🍓', '🍒', '🍉'],
+      ['🚀', '🛸', '⭐', '🌌']
+    ];
     const randomSet = randomEmojiSets[Math.floor(Math.random() * randomEmojiSets.length)];
     createBurst(e.clientX, e.clientY, randomSet);
+    
+    // Redirect to home if it's the logo
+    if (e.currentTarget.id === 'site-logo' || e.currentTarget.id === 'welcome-logo') {
+        navigateToPage('page-1');
+    }
   }
 
   if (siteLogo) siteLogo.addEventListener('click', handleBrandingClick);

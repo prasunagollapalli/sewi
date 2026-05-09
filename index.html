@@ -169,17 +169,14 @@
     <div class="background-animation"></div>
     <div class="floating-elements" id="hero-floating"></div>
 
-    <!-- Audio Control -->
-    <div id="site-logo" class="site-logo">SeWi</div>
-    <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
-      🎵
-    </button>
-    <button id="home-btn" class="nav-btn primary-btn" data-target="page-1" aria-label="Home" style="position: fixed; top: 20px; right: 80px;">🏠 Home</button>
-    <button id="user-logout-btn" class="user-logout-btn" aria-label="Logout" style="position: fixed; top: 20px; right: 20px;">🔒</button>
-    <audio id="bg-music" loop>
-      <!-- Placeholder for music file -->
-      <!-- <source src="/path/to/song.mp3" type="audio/mpeg"> -->
-    </audio>
+    <!-- Navigation Bar (Top Right) -->
+    <div class="top-nav-bar">
+      <div id="site-logo" class="site-logo">SeWi</div>
+      <button id="music-toggle" class="top-btn" aria-label="Toggle Music">🎵</button>
+      <button id="home-btn" class="nav-btn top-btn" data-target="page-1" aria-label="Home">🏠 Home</button>
+      <button id="user-logout-btn" class="user-logout-btn top-btn" aria-label="Logout">🔒</button>
+    </div>
+    <audio id="bg-music" loop></audio>
 
     <!-- Pages Container -->
     <div class="pages-container">
@@ -281,7 +278,10 @@
             <p id="feedback-success-msg" class="hidden" style="color: #4caf50; font-weight: bold; margin-top: 15px; background: white; padding: 10px; border-radius: 5px;">Message sent! Thank you! 🥰</p>
           </div>
         </div>
-        <button class="nav-btn prev-btn" data-target="page-3" style="position: absolute; bottom: 20px;">&larr; Memories 📸</button>
+          <div class="conclusion-nav">
+            <button class="nav-btn prev-btn" data-target="page-3">&larr; Memories 📸</button>
+          </div>
+        </div>
       </section>
 
     </div>
