@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SeWi: The Secret Wisher</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400;1,600&family=Montserrat:wght@200;300;400&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <!-- Attractive Home Page -->
+    <div id="home-page" class="home-page">
+      <div class="home-content fade-in-up">
+        <h1 class="home-title">SeWi</h1>
+        <p class="home-subtitle">Create and share unforgettable digital memories with the ones you love.</p>
+        <button id="open-login-btn" class="nav-btn primary-btn">Enter SeWi</button>
+      </div>
+      <div class="home-decor decor-1">✨</div>
+      <div class="home-decor decor-2">💖</div>
+      <div class="home-decor decor-3">🌸</div>
+      <div class="author-info home-author">
+        <p>Author: KP</p>
+        <p>Instagram: <a href="https://instagram.com/kiran._mr.8" target="_blank">@kiran._mr.8</a></p>
+      </div>
+    </div>
+
+    <!-- Login Overlay -->
+    <div id="login-overlay" class="login-overlay hidden">
+      <div id="welcome-logo" class="welcome-logo">SeWi</div>
+      <h1 id="welcome-title" class="welcome-title" style="cursor: pointer;">SeWi: The Secret Wisher</h1>
+      <div class="login-box">
+        <h2>Welcome</h2>
+        <p>Please enter your credentials to access the site.</p>
+        <form id="login-form">
+          <select id="role-select" required>
+            <option value="receiver">Receiver</option>
+            <option value="sender">Sender</option>
+            <option value="admin">Admin</option>
+          </select>
+          <input type="text" id="username" name="username" placeholder="Username" required>
+          <input type="password" id="password" name="password" placeholder="Password" required>
+          <button type="submit">Login</button>
+          <p id="login-error" class="error-message"></p>
+        </form>
+      </div>
+      <div class="author-info login-author">
+        <p>Author: KP</p>
+        <p>Instagram: <a href="https://instagram.com/kiran._mr.8" target="_blank">@kiran._mr.8</a></p>
+      </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="admin-dashboard hidden">
+      <div class="admin-content">
+        <h2>Admin Dashboard</h2>
+        <div id="editing-indicator" class="editing-indicator"
+          style="display:none; background:#e3f2fd; padding:10px; margin-bottom:15px; border-radius:5px; color:#1976d2; font-weight:bold;">
+          Editing: <span id="current-editing-user">None</span>
+        </div>
+        <button id="logout-btn" class="logout-btn">Logout</button>
+        
+        <!-- Admin Section: User Management -->
+        <div id="admin-user-management" class="form-group" style="display:none;">
+          <label>Sender Management:</label>
+          <div class="user-management-panel">
+            <ul id="user-list" class="user-list">
+              <!-- User items will be injected here -->
+            </ul>
+            <div class="add-user-form">
+              <input type="text" id="new-sender-username" placeholder="New Sender Username" required style="margin-bottom: 5px;">
+              <input type="password" id="new-sender-password" placeholder="New Sender Password" required style="margin-bottom: 5px;">
+              <button type="button" id="add-user-btn" class="add-user-btn">Create Sender</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sender Section: Configuration -->
+        <form id="admin-config-form" style="display:none;"> <!-- Hidden by default until a user is selected -->
+          <div class="form-group receiver-credentials">
+            <label>Receiver Credentials:</label>
+            <input type="text" id="config-receiver-username" placeholder="Receiver Username (Required)" required style="margin-bottom: 5px;">
+            <input type="password" id="config-receiver-password" placeholder="Receiver Password (Required)" required>
+          </div>
+          <div class="form-group">
+            <label>Relation:</label>
+            <select id="config-relation">
+              <option value="partner">Partner / Love</option>
+              <option value="friend">Best Friend</option>
+              <option value="family">Family (General)</option>
+              <option value="sibling">Brother / Sister</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>From Name:</label>
+            <input type="text" id="config-from-name" placeholder="E.g., John">
+          </div>
+          <div class="form-group">
+            <label>To Name:</label>
+            <input type="text" id="config-to-name" placeholder="E.g., Sarah">
+          </div>
+          <div class="form-group">
+            <label>Message Content:</label>
+            <textarea id="config-message" rows="5" placeholder="Enter the letter content here..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Background Theme:</label>
+            <select id="config-background-theme">
+              <option value="theme-default">Default Purple</option>
+              <option value="theme-ocean">Deep Ocean</option>
+              <option value="theme-red">Romantic Red</option>
+              <option value="theme-forest">Enchanted Forest</option>
+              <option value="theme-sunset">Golden Sunset</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Custom Background Image (Overrides Theme):</label>
+            <div id="bg-drop-zone" class="drop-zone">
+              <p>Drag & Drop an image here or click to select</p>
+              <input type="file" id="bg-image-upload" accept="image/*" class="hidden-input">
+              <div id="bg-preview" class="music-preview"></div>
+            </div>
+          </div>
+
+          <div class="form-group receiver-feedback-section" style="background: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 4px solid #ff4081;">
+            <label>Receiver Feedback:</label>
+            <p id="config-receiver-feedback" style="font-style: italic; color: #555; margin-top: 5px;">No feedback received yet.</p>
+          </div>
+
+          <div class="form-group">
+            <label>Music (URL or Upload):</label>
+            <input type="text" id="config-music-url" placeholder="https://example.com/song.mp3"
+              style="margin-bottom: 5px;">
+
+            <div id="music-drop-zone" class="drop-zone">
+              <p>Drag & Drop music here or click to select</p>
+              <input type="file" id="music-upload" accept="audio/*" class="hidden-input">
+              <div id="music-preview" class="music-preview"></div>
+            </div>
+            <small>Upload overrides URL</small>
+          </div>
+
+          <div class="form-group">
+            <label>Upload Memories (Images):</label>
+            <div id="drop-zone" class="drop-zone">
+              <p>Drag & Drop images here or click to select</p>
+              <input type="file" id="image-input" multiple accept="image/*" class="hidden-input">
+              <div id="preview-container" class="preview-container"></div>
+            </div>
+          </div>
+
+          <button type="submit" class="save-btn">Save Configuration</button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Background Animation -->
+    <div class="background-animation"></div>
+    <div class="floating-elements" id="hero-floating"></div>
+
+    <!-- Audio Control -->
+    <div id="site-logo" class="site-logo">SeWi</div>
+    <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
+      🎵
+    </button>
+    <button id="home-btn" class="nav-btn primary-btn" data-target="page-1" aria-label="Home" style="position: fixed; top: 20px; right: 80px;">🏠 Home</button>
+    <button id="user-logout-btn" class="user-logout-btn" aria-label="Logout" style="position: fixed; top: 20px; right: 20px;">🔒</button>
+    <audio id="bg-music" loop>
+      <!-- Placeholder for music file -->
+      <!-- <source src="/path/to/song.mp3" type="audio/mpeg"> -->
+    </audio>
+
+    <!-- Pages Container -->
+    <div class="pages-container">
+
+      <!-- Page 1: Hero -->
+      <section class="page active" id="page-1">
+        <div class="hero-content fade-in-up">
+          <h1 class="title">SeWi: The Secret Wisher</h1>
+          <p class="subtitle">A little corner of the internet, just for you.</p>
+        </div>
+        <button class="nav-btn next-btn" data-target="page-2">Start Journey 🌸 &rarr;</button>
+      </section>
+
+      <!-- Page 2: The Letter -->
+      <section class="page" id="page-2">
+        <!-- Cake Intro -->
+        <div class="cake-container" id="cake-intro">
+          <div class="plate"></div>
+          <div class="cake">
+            <div class="candle">
+              <div class="flame"></div>
+            </div>
+            <div class="frosting"></div>
+            <!-- Static Heart Decorations -->
+            <div class="heart-deco h1">❤️</div>
+            <div class="heart-deco h2">❤️</div>
+            <div class="heart-deco h3">❤️</div>
+            <div class="cherries">
+              <div class="cherry"></div>
+              <div class="cherry"></div>
+              <div class="cherry"></div>
+              <div class="cherry"></div>
+              <div class="cherry"></div>
+            </div>
+            <div class="bizcocho"></div>
+          </div>
+          <p class="instruction-text">Make a wish & click the cake! 🎂</p>
+        </div>
+
+        <div class="container hidden" id="page-2-content">
+          <h2 class="section-title">A Message</h2>
+          <div class="envelope-container" id="envelope">
+            <div class="envelope">
+              <div class="flap"></div>
+              <div class="body"></div>
+              <div class="envelope-from-name" id="envelope-from-name"></div>
+              <div class="letter">
+                <div class="text">
+                  <p>Dear Friend,</p>
+                  <p>I wanted to tell you...</p>
+                  <p><strong>(Click to read)</strong></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Full Letter Modal -->
+        <div class="letter-modal hidden" id="letter-modal">
+          <div class="modal-content">
+            <span class="close-btn" id="close-letter">&times;</span>
+            <div class="typewriter-text" id="typewriter"></div>
+          </div>
+        </div>
+
+        <button class="nav-btn prev-btn" data-target="page-1">&larr; Back 🌹</button>
+        <button class="nav-btn next-btn" data-target="page-3">Our Memories 💖 &rarr;</button>
+      </section>
+
+      <!-- Page 3: Gallery -->
+      <section class="page" id="page-3">
+        <div class="container">
+          <h2 class="section-title">Our Memories</h2>
+          <div class="gallery-grid">
+            <!-- Images -->
+            <div class="gallery-item placeholder">Photo 1</div>
+            <div class="gallery-item placeholder">Photo 2</div>
+            <div class="gallery-item placeholder">Photo 3</div>
+          </div>
+        </div>
+        <button class="nav-btn prev-btn" data-target="page-2">&larr; Message 💌</button>
+        <button class="nav-btn next-btn" data-target="page-4">Conclusion 🌟 &rarr;</button>
+      </section>
+
+      <!-- Page 4: Conclusion & Feedback -->
+      <section class="page" id="page-4">
+        <div class="container conclusion-container">
+          <h2 class="section-title">Did you like it?</h2>
+          <div class="feedback-buttons">
+            <button id="yes-btn" class="nav-btn primary-btn">Yes, I loved it! 💖</button>
+            <button id="no-btn" class="nav-btn secondary-btn">No 😢</button>
+          </div>
+          
+          <div id="feedback-form-container" class="hidden" style="margin-top: 30px; text-align: center;">
+            <p style="margin-bottom: 15px; font-size: 1.2rem; color: white;">I'm so glad! Send a message back:</p>
+            <textarea id="feedback-message" rows="4" placeholder="Type your message here..." style="width: 100%; max-width: 400px; padding: 15px; border-radius: 10px; border: none; margin-bottom: 15px; font-family: var(--font-body);"></textarea>
+            <br>
+            <button id="send-feedback-btn" class="nav-btn primary-btn" style="font-size: 1rem; padding: 10px 30px;">Send Message 💌</button>
+            <p id="feedback-success-msg" class="hidden" style="color: #4caf50; font-weight: bold; margin-top: 15px; background: white; padding: 10px; border-radius: 5px;">Message sent! Thank you! 🥰</p>
+          </div>
+        </div>
+        <button class="nav-btn prev-btn" data-target="page-3" style="position: absolute; bottom: 20px;">&larr; Memories 📸</button>
+      </section>
+
+    </div>
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
