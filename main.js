@@ -120,26 +120,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Auth Logic ---
   function checkAuth() {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    const role = localStorage.getItem('userRole');
-    const storedUsername = localStorage.getItem('currentUserName');
-
-    if (isLoggedIn === 'true') {
-      homePage.classList.add('hidden');
-      loginOverlay.classList.add('hidden');
-      if (role === 'admin' || role === 'sender') {
-        adminDashboard.classList.remove('hidden');
-        renderAdminDashboard();
-      } else if (role === 'receiver' && storedUsername) {
-        // Load User Specific Data
-        loadUserAndPlay(storedUsername);
-      }
-    } else {
-      homePage.classList.remove('hidden');
-      loginOverlay.classList.add('hidden');
-      adminDashboard.classList.add('hidden');
-      stopMusic();
-    }
+    // We clear the "auto-load" logic so it always starts at the Home Page
+    // but we keep the session in localStorage so they don't have to re-type credentials
+    // if they go to the login screen.
+    
+    homePage.classList.remove('hidden');
+    loginOverlay.classList.add('hidden');
+    adminDashboard.classList.add('hidden');
+    stopMusic();
+    
+    // Reset to first page of the journey if they were in the middle of it
+    navigateToPage('page-1');
   }
 
   function stopMusic() {
