@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getUserDataByReceiver(username, password) {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url, description)')
+        .select('*, memories(image_url)')
         .eq('receiver_username', username)
         .eq('receiver_password', password)
         .single();
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getUserDataBySender(username, password) {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url, description)')
+        .select('*, memories(image_url)')
         .eq('sender_username', username)
         .eq('sender_password', password)
         .single();
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async getAllUsersForAdmin() {
       const { data, error } = await supabase
         .from('users')
-        .select('*, memories(image_url, description)');
+        .select('*, memories(image_url)');
       if (error) throw error;
       return data;
     },
@@ -360,19 +360,13 @@ document.addEventListener('DOMContentLoaded', () => {
     pendingMusicFile = null;
     pendingBgImageFile = null;
 
-    // Update Music Source
-    if (user.music_url && bgMusic) {
-      bgMusic.src = user.music_url;
+    if (document.getElementById('music-preview')) {
+        document.getElementById('music-preview').innerHTML = user.music_url ? `Current Music: ${user.music_url.split('/').pop()} 🎵` : '';
     }
     
-    const handleLogoRedirect = (e) => {
-        e.preventDefault();
-        // Redirect to Home page if you want, or just leave it for the burst effect
-        // navigateToPage('page-1');
-    };
-    
-    if (siteLogo) siteLogo.onclick = handleLogoRedirect;
-    if (welcomeLogo) welcomeLogo.onclick = handleLogoRedirect;
+    if (document.getElementById('bg-preview')) {
+        document.getElementById('bg-preview').innerHTML = user.bg_image_url ? `Current Background: ${user.bg_image_url.split('/').pop()} 🖼️` : '';
+    }
 
     renderPreviews();
 
@@ -522,12 +516,6 @@ document.addEventListener('DOMContentLoaded', () => {
       descInput.style.width = '100%';
       descInput.style.fontSize = '0.8rem';
       descInput.style.padding = '5px';
-      
-      // STOP CLICK FROM OPENING FILE SELECT
-      descInput.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-      
       descInput.addEventListener('input', (e) => {
         m.description = e.target.value;
       });
@@ -953,21 +941,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const siteLogo = document.getElementById('site-logo');
   const welcomeTitle = document.getElementById('welcome-title');
   const welcomeLogo = document.getElementById('welcome-logo');
+  const randomEmojiSets = [
+    ['🦄', '🌈', '✨', '🍭'],
+    ['🐯', '🦁', '🐻', '🐼'],
+    ['🍎', '🍓', '🍒', '🍉'],
+    ['⚽', '🏀', '🏈', '⚾'],
+    ['😀', '😂', '😎', '😍'],
+    ['🚀', '🛸', '⭐', '🌌']
+  ];
 
   function handleBrandingClick(e) {
-    const randomEmojiSets = [
-      ['🦄', '🌈', '✨', '🍭'],
-      ['🐯', '🦁', '🐻', '🐼'],
-      ['🍎', '🍓', '🍒', '🍉'],
-      ['🚀', '🛸', '⭐', '🌌']
-    ];
     const randomSet = randomEmojiSets[Math.floor(Math.random() * randomEmojiSets.length)];
     createBurst(e.clientX, e.clientY, randomSet);
-    
-    // Redirect to home if it's the logo (Disabled as per request)
-    // if (e.currentTarget.id === 'site-logo' || e.currentTarget.id === 'welcome-logo') {
-    //     navigateToPage('page-1');
-    // }
   }
 
   if (siteLogo) siteLogo.addEventListener('click', handleBrandingClick);
