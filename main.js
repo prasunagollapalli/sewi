@@ -157,15 +157,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function loadUserAndPlay(username) {
     const password = localStorage.getItem('receiverPassword');
-    const userData = await dbHelper.getUserDataByReceiver(username, password);
-    
-    if (!userData) {
-      console.error("User data not found for", username);
+    const user = await dbHelper.getUserDataByReceiver(username, password);
+    if (!user) {
+      alert("Error loading receiver data. Please login again.");
+      handleLogout();
       return;
     }
 
-    currentUserConfig = userData;
-    currentMemories = userData.memories ? userData.memories.map(m => m.image_url) : [];
+    // Track Open Event
+    try {
+        await supabase
+            .from('users')
+            .update({ 
+                opened_count: (user.opened_count || 0) + 1,
+                last_opened_at: new Date().toISOString()
+            })
+            .eq('id', user.id);
+    } catch (e) { console.error("Tracking error:", e); }
+
+    currentUserConfig = user;
+    currentMemories = user.memories ? user.memories.map(m => m.image_url) : [];
 
     applyConfig();
 
@@ -292,13 +303,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function renderUserList() {
-    const list = document.getElementById('user-list');
-    if (!list) return;
-    list.innerHTML = 'Loading users...';
-    
-    try {
+    const userList = document.getElementById('user-list');
+    if (userList) {
+      userList.innerHTML = '<p>Loading users...</p>';
+      try {
         const users = await dbHelper.getAllUsersForAdmin();
-        list.innerHTML = '';
+        const totalUsers = users.length;
+        userList.innerHTML = `<div class="admin-stats" style="margin-bottom: 20px; padding: 10px; background: #f0f0f0; border-radius: 8px; font-weight: bold;">🌍 Total Users using SeWi: ${totalUsers}</div>`;
+        
+        const list = document.createElement('ul');
+        list.classList.add('user-list');
         users.forEach((user) => {
           const li = document.createElement('li');
           li.classList.add('user-item');
@@ -312,6 +326,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
           list.appendChild(li);
         });
+        userList.appendChild(list);
 
         document.querySelectorAll('.delete-user-btn').forEach(btn => {
           btn.addEventListener('click', async (e) => {
@@ -329,8 +344,9 @@ document.addEventListener('DOMContentLoaded', () => {
               if (user) loadUserForEditing(user);
             });
           });
-    } catch (err) {
-        list.innerHTML = 'Error loading users.';
+      } catch (err) {
+        userList.innerHTML = 'Error loading users.';
+      }
     }
   }
 
@@ -343,6 +359,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('config-receiver-username').value = user.receiver_username || "";
     document.getElementById('config-receiver-password').value = user.receiver_password || "";
     const relationEl = document.getElementById('config-relation');
+    
+    // Display Receiver Stats
+    const statsContainer = document.getElementById('receiver-stats');
+    if (statsContainer) {
+        const lastOpened = user.last_opened_at ? new Date(user.last_opened_at).toLocaleString() : 'Never';
+        statsContainer.innerHTML = `
+            <div style="background: #e3f2fd; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #2196f3;">
+                <h4 style="margin: 0 0 10px 0; color: #1976d2;">📈 Receiver Activity</h4>
+                <p style="margin: 5px 0;"><strong>Opened:</strong> ${user.opened_count || 0} times</p>
+                <p style="margin: 5px 0;"><strong>Last Seen:</strong> ${lastOpened}</p>
+            </div>
+        `;
+    }
+
     if (relationEl) relationEl.value = user.relation || "partner";
     document.getElementById('config-from-name').value = user.from_name || defaultUserConfig.fromName;
     document.getElementById('config-to-name').value = user.to_name || defaultUserConfig.toName;
@@ -821,14 +851,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function stopMusicParticles() {
     if (musicInterval) clearInterval(musicInterval);
     musicInterval = null;
-  }
-
-  function stopMusic() {
-    if (bgMusic) {
-      bgMusic.pause();
-      bgMusic.currentTime = 0;
-      // isPlaying and particles handled by events
-    }
   }
 
   // --- Music Toggle ---
