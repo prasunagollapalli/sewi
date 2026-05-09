@@ -119,18 +119,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- Auth Logic ---
-  function checkAuth() {
-    // We clear the "auto-load" logic so it always starts at the Home Page
-    // but we keep the session in localStorage so they don't have to re-type credentials
-    // if they go to the login screen.
-    
-    homePage.classList.remove('hidden');
-    loginOverlay.classList.add('hidden');
-    adminDashboard.classList.add('hidden');
-    stopMusic();
-    
-    // Reset to first page of the journey if they were in the middle of it
-    navigateToPage('page-1');
+  function checkAuth(isInitialLoad = false) {
+    if (isInitialLoad) {
+      // Force reset to Home Page only on the very first load/refresh
+      homePage.classList.remove('hidden');
+      loginOverlay.classList.add('hidden');
+      adminDashboard.classList.add('hidden');
+      stopMusic();
+      navigateToPage('page-1');
+      return;
+    }
+
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const role = localStorage.getItem('userRole');
+    const storedUsername = localStorage.getItem('currentUserName');
+
+    if (isLoggedIn === 'true') {
+      homePage.classList.add('hidden');
+      loginOverlay.classList.add('hidden');
+      if (role === 'admin' || role === 'sender') {
+        adminDashboard.classList.remove('hidden');
+        renderAdminDashboard();
+      } else if (role === 'receiver' && storedUsername) {
+        loadUserAndPlay(storedUsername);
+      }
+    }
   }
 
   function stopMusic() {
@@ -1122,5 +1135,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // --- INIT ---
-  checkAuth();
+  checkAuth(true); // Pass true to force home page on initial load
 });
