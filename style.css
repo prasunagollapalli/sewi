@@ -589,7 +589,7 @@ h3 {
 }
 
 .hidden {
-  
+  display: none;
 }
 
 /* Gallery Grid */

@@ -283,7 +283,17 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('userRole');
     localStorage.removeItem('currentUserName');
-    homePage.classList.add('hidden'); loginOverlay.classList.add('hidden'); adminDashboard.classList.remove('hidden'); renderAdminDashboard();
+    localStorage.removeItem('receiverPassword');
+    
+    // Completely reset the UI
+    adminDashboard.classList.add('hidden');
+    loginOverlay.classList.add('hidden');
+    cakeIntro.classList.add('hidden');
+    
+    // Show home page
+    homePage.classList.remove('hidden');
+    navigateToPage('page-1');
+    stopMusic();
   }
 
   logoutBtn.addEventListener('click', handleLogout);
