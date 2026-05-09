@@ -60,17 +60,37 @@ document.addEventListener('DOMContentLoaded', () => {
         .getPublicUrl(data.path);
       return publicUrl;
     },
-    async saveMemories(userId, imageUrls) {
+    async saveMemories(userId, memories) {
       // First delete old memories
       await supabase.from('memories').delete().eq('user_id', userId);
       // Then insert new ones
-      if (imageUrls.length > 0) {
-        const memoryData = imageUrls.map(url => ({ user_id: userId, image_url: url }));
+      if (memories.length > 0) {
+        const memoryData = memories.map(m => ({ 
+            user_id: userId, 
+            image_url: m.image_url, 
+            description: m.description || "" 
+        }));
         const { error } = await supabase.from('memories').insert(memoryData);
         if (error) throw error;
       }
     }
   };
+  
+  // --- Hidden Admin Logic ---
+  let authorClickCount = 0;
+  document.querySelectorAll('.author-trigger').forEach(el => {
+    el.addEventListener('click', () => {
+      authorClickCount++;
+      if (authorClickCount >= 3) {
+        const adminOption = document.getElementById('admin-option');
+        if (adminOption) {
+          adminOption.style.display = 'block';
+          adminOption.parentElement.value = 'admin'; // Auto-select it
+          alert("Admin access enabled! 🤫");
+        }
+      }
+    });
+  });
 
   let currentUserConfig = null; // Config of the logged-in user
   let currentMemories = [];
@@ -332,7 +352,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (feedbackEl) feedbackEl.innerText = user.receiver_feedback || "No feedback received yet.";
 
     // Load Memories from the user object (already joined)
-    tempMemories = user.memories ? user.memories.map(m => m.image_url) : [];
+    tempMemories = user.memories ? user.memories.map(m => ({ 
+        image_url: m.image_url, 
+        description: m.description || "" 
+    })) : [];
     
     pendingMusicFile = null;
     pendingBgImageFile = null;
@@ -426,21 +449,20 @@ document.addEventListener('DOMContentLoaded', () => {
       await supabase.from('users').update(updates).eq('id', user.id);
 
       // Save Memories
-      // Note: tempMemories might contain local Blobs/DataURLs if they were just added
-      // We should upload them if they are not already remote URLs
-      const uploadedMemoryUrls = await Promise.all(tempMemories.map(async (src, i) => {
-          if (src.startsWith('data:')) {
-              // Convert DataURL to File
-              const res = await fetch(src);
+      // Note: tempMemories contains objects { image_url, description }
+      const uploadedMemories = await Promise.all(tempMemories.map(async (m, i) => {
+          let url = m.image_url;
+          if (url.startsWith('data:')) {
+              const res = await fetch(url);
               const blob = await res.blob();
               const file = new File([blob], `memory_${i}_${Date.now()}.jpg`, { type: 'image/jpeg' });
               const path = `${user.id}/memories/${file.name}`;
-              return await dbHelper.uploadFile('memories', path, file);
+              url = await dbHelper.uploadFile('memories', path, file);
           }
-          return src; // Already a URL
+          return { image_url: url, description: m.description };
       }));
 
-      await dbHelper.saveMemories(user.id, uploadedMemoryUrls);
+      await dbHelper.saveMemories(user.id, uploadedMemories);
 
       alert(`Saved configuration successfully!`);
       location.reload();
@@ -461,16 +483,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderPreviews() {
     previewContainer.innerHTML = '';
-    tempMemories.forEach((src, index) => {
+    tempMemories.forEach((m, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.classList.add('preview-wrapper');
+      wrapper.style.display = 'flex';
+      wrapper.style.flexDirection = 'column';
+      wrapper.style.gap = '5px';
+      wrapper.style.background = '#fff';
+      wrapper.style.padding = '10px';
+      wrapper.style.borderRadius = '10px';
+      wrapper.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+
       const img = document.createElement('img');
-      img.src = src;
+      img.src = m.image_url;
       img.classList.add('preview-img');
       img.title = "Click to remove";
+      img.style.width = '100px';
+      img.style.height = '100px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '5px';
+      img.style.cursor = 'pointer';
+      
       img.addEventListener('click', () => {
         tempMemories.splice(index, 1);
         renderPreviews();
       });
-      previewContainer.appendChild(img);
+
+      const descInput = document.createElement('input');
+      descInput.type = 'text';
+      descInput.placeholder = 'Add a caption...';
+      descInput.value = m.description || '';
+      descInput.style.width = '100%';
+      descInput.style.fontSize = '0.8rem';
+      descInput.style.padding = '5px';
+      descInput.addEventListener('input', (e) => {
+        m.description = e.target.value;
+      });
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(descInput);
+      previewContainer.appendChild(wrapper);
     });
   }
 
@@ -491,7 +543,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
-          tempMemories.push(e.target.result);
+          tempMemories.push({ image_url: e.target.result, description: "" });
           renderPreviews();
         };
         reader.readAsDataURL(file);
@@ -627,9 +679,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (galleryGrid) {
       galleryGrid.innerHTML = '';
 
-      if (currentMemories && currentMemories.length > 0) {
-        currentMemories.forEach(src => {
-          const quote = romanticQuotes[Math.floor(Math.random() * romanticQuotes.length)];
+      if (currentUserConfig.memories && currentUserConfig.memories.length > 0) {
+        currentUserConfig.memories.forEach(m => {
           const rotation = (Math.random() * 10 - 5).toFixed(2);
           const delay = (Math.random() * 5).toFixed(2);
 
@@ -647,7 +698,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }, { once: true });
           });
 
-          card.innerHTML = `<img src="${src}" alt="Our Memory"><p class="memory-quote">"${quote}"</p>`;
+          // Use memory-specific description or fall back to random quote
+          const caption = m.description || romanticQuotes[Math.floor(Math.random() * romanticQuotes.length)];
+          card.innerHTML = `<img src="${m.image_url}" alt="Our Memory"><p class="memory-quote">"${caption}"</p>`;
           galleryGrid.appendChild(card);
         });
       } else {
@@ -1006,13 +1059,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const feedbackSuccessMsg = document.getElementById('feedback-success-msg');
 
   if (noBtn) {
-    noBtn.addEventListener('mouseover', () => {
-      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - 20) + 10;
-      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - 20) + 10;
+    noBtn.addEventListener('mouseover', (e) => {
+      const padding = 50;
+      const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding * 2) + padding;
+      const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding * 2) + padding;
+      
       noBtn.style.position = 'fixed';
+      noBtn.style.transition = 'all 0.15s ease-out';
       noBtn.style.left = `${x}px`;
       noBtn.style.top = `${y}px`;
-      noBtn.style.zIndex = '1000';
+      noBtn.style.zIndex = '9999';
+    });
+    
+    // Extra insurance: jump if click is somehow registered
+    noBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const padding = 50;
+        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth - padding * 2) + padding;
+        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight - padding * 2) + padding;
+        noBtn.style.left = `${x}px`;
+        noBtn.style.top = `${y}px`;
     });
   }
 
