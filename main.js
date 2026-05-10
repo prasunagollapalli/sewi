@@ -1206,12 +1206,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (targetPage) {
       if (pageId === 'page-2') {
         const envelope = document.getElementById('envelope');
+        const envelopeContainer = document.querySelector('.envelope-container');
+        const cakeIntro = document.getElementById('cake-intro');
+        
         if(envelope) envelope.classList.remove('open');
-        const p2c = document.getElementById('page-2-content');
-        if(p2c) p2c.classList.add('hidden');
-        const ci = document.getElementById('cake-intro');
-        if(ci) ci.classList.remove('hidden');
-        if(typeof resetCake === 'function') resetCake();
+        
+        // Hide cake and show envelope when returning
+        if(cakeIntro) cakeIntro.classList.add('hidden');
+        if(envelopeContainer) envelopeContainer.classList.remove('hidden');
       }
     }
   }

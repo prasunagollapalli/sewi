@@ -1238,10 +1238,10 @@ h3 {
 }
 
 /* Memories Page Scrolling */
-#page-3 {
+#page-3 { padding-top: 120px !important;
   overflow-y: auto !important;
   max-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 150px;
 }
 
 .gallery-container {
