@@ -195,6 +195,10 @@ document.addEventListener('DOMContentLoaded', () => {
         wishingBanner.classList.remove('hidden');
     }
 
+    // Apply Cake Name Tag
+    const cakeNameTag = document.getElementById('cake-name-tag');
+    if (cakeNameTag) cakeNameTag.innerText = `To: ${user.to_name || 'My Dearest'}`;
+
     applyConfig();
 
     // Auto Play Music
@@ -668,6 +672,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
+          if (tempMemories.length >= 6) {
+              alert("Maximum 6 memories allowed.");
+              return;
+          }
           tempMemories.push({ image_url: e.target.result, description: "" });
           renderPreviews();
         };

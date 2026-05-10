@@ -1678,3 +1678,14 @@ h3 {
     font-size: 1.1rem;
   }
 }
+/* Cake Name Tag */
+.cake-name-tag {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  color: #ff4081;
+  margin-bottom: 20px;
+  font-weight: 600;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  animation: fadeInDown 1s ease-out;
+  text-align: center;
+}
