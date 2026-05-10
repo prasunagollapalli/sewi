@@ -1238,10 +1238,14 @@ h3 {
 }
 
 /* Memories Page Scrolling */
-#page-3 { padding-top: 120px !important;
+#page-3 {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important; /* Align to top */
   overflow-y: auto !important;
   max-height: 100vh;
-  padding-bottom: 150px;
+  padding-top: 140px !important; /* Increased space for banner */
+  padding-bottom: 150px !important;
 }
 
 .gallery-container {

@@ -771,11 +771,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hero title is now handled by salutation in loadUserAndPlay
 
-    // Update Envelope From Name
-    const envelopeFromEl = document.getElementById('envelope-from-name');
-    if (envelopeFromEl) {
-      envelopeFromEl.innerText = `From: ${currentUserConfig.from_name}`;
-    }
+    // Envelope From Name is now removed for a cleaner look
 
     // Apply Background Theme
     const bgAnimation = document.querySelector('.background-animation');
