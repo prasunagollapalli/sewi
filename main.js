@@ -536,9 +536,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const user = currentUserConfig;
       
-      // Update User Config Object
+      // Update User Data (Only fields in the 'users' table)
       const updates = {
-        ...currentUserConfig,
         salutation: document.getElementById('config-salutation').value,
         wish_banner_message: document.getElementById('config-wish-banner').value,
         receiver_username: document.getElementById('config-receiver-username').value,
@@ -1169,10 +1168,28 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function navigateToPage(pageId) {
-    pages.forEach(page => page.classList.remove('active'));
+    pages.forEach((page) => {
+      page.classList.remove('active');
+      if (page.id === pageId) {
+        page.classList.add('active');
+        // Reset scroll for the page
+        page.scrollTop = 0;
+      }
+    });
+
+    // Control Wishing Banner Visibility
+    const wishingBanner = document.getElementById('receiver-wishing-banner');
+    if (wishingBanner) {
+      // Show ONLY on Page 1 for logged-in receivers
+      if (pageId === 'page-1' && localStorage.getItem('userRole') === 'receiver') {
+        wishingBanner.classList.remove('hidden');
+      } else {
+        wishingBanner.classList.add('hidden');
+      }
+    }
+
     const targetPage = document.getElementById(pageId);
     if (targetPage) {
-      targetPage.classList.add('active');
       if (pageId === 'page-2') {
         const envelope = document.getElementById('envelope');
         if(envelope) envelope.classList.remove('open');
