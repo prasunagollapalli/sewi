@@ -761,9 +761,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function applyConfig() {
     if (!currentUserConfig) return;
 
-    // Update Title (To Name)
-    const titleEl = document.querySelector('.title');
-    if (titleEl) titleEl.innerText = `For ${currentUserConfig.to_name}`;
+    // Hero title is now handled by salutation in loadUserAndPlay
 
     // Update Envelope From Name
     const envelopeFromEl = document.getElementById('envelope-from-name');
