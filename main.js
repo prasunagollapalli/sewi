@@ -335,7 +335,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // (Security note: in a real app, use Supabase Auth for this)
       const { data: users, error } = await supabase
         .from('users')
-        .select('*')
+        .select('*, memories(*)')
         .eq('sender_username', currentSender);
       
       if (users && users.length > 0) {
