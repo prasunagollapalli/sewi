@@ -129,13 +129,13 @@ body {
 .user-logout-btn:hover {
   transform: scale(1.1);
   background: white;
-  color: #ff4081;
+  
 }
 
 /* Author Info */
 .author-info {
   margin-top: 2rem;
-  text-align: center;
+  
   font-family: var(--font-body);
   font-size: 0.9rem;
   color: #555;
@@ -144,7 +144,7 @@ body {
 }
 
 .author-info a {
-  color: #ff4081;
+  
   text-decoration: none;
   font-weight: bold;
   border-bottom: 1px dashed rgba(255, 64, 129, 0.5);
@@ -170,7 +170,7 @@ body {
 }
 
 .login-author a:hover {
-  color: #ff4081;
+  
   border-bottom: 1px solid #ff4081;
 }
 
@@ -179,9 +179,9 @@ body {
   position: fixed;
   top: 20px;
   left: 20px;
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  font-weight: 600;
+  
+  
+  
   color: #ffafbd;
   z-index: 20000;
   /* Always on top of all layers */
@@ -196,7 +196,7 @@ body {
 
 .site-logo:hover {
   transform: scale(1.1);
-  color: #ff4081;
+  
 }
 
 /* Welcome Short Logo */
@@ -204,10 +204,10 @@ body {
   position: absolute;
   top: 20px;
   left: 20px;
-  font-family: var(--font-heading);
+  
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ff4081;
+  
   background: white;
   padding: 10px 25px;
   border-radius: 50px;
@@ -234,13 +234,13 @@ body {
 
 /* Login Welcome Title */
 .welcome-title {
-  font-family: var(--font-heading);
+  
   font-size: 4rem;
   font-weight: 900;
   /* Extra Black */
   margin-bottom: 2rem; /* Reduced from 5rem for vertical layout */
   margin-top: 0;
-  text-align: center;
+  
   cursor: pointer;
   z-index: 2001;
   text-transform: uppercase;
@@ -320,8 +320,8 @@ body {
   background: linear-gradient(135deg, #ffafbd, #ffc3a0);
   border: none;
   border-radius: 50px;
-  font-family: var(--font-heading);
-  font-weight: 600;
+  
+  
   font-size: 1.2rem;
   cursor: pointer;
   transition: all 0.4s ease;
@@ -363,7 +363,7 @@ body {
   border: 1px solid var(--glass-border);
   backdrop-filter: blur(10px);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
-  text-align: center;
+  
 }
 
 .title {
@@ -384,13 +384,13 @@ body {
 h1,
 h2,
 h3 {
-  font-family: var(--font-heading);
-  font-weight: 600;
+  
+  
 }
 
 .section-title {
   font-size: 2.5rem;
-  text-align: center;
+  
   margin-bottom: 2rem;
   color: #fff;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -497,7 +497,7 @@ h3 {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
+  
 }
 
 .envelope-container.open .flap {
@@ -543,7 +543,7 @@ h3 {
   position: relative;
   overflow-y: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  font-family: var(--font-heading);
+  
   font-size: 1.5rem;
   line-height: 1.6;
   border: 4px solid #ffc1e3;
@@ -904,7 +904,7 @@ h3 {
   padding: 60px 40px;
   border-radius: 30px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  
   border: 1px solid rgba(255, 255, 255, 0.6);
   max-width: 600px;
   width: 90%;
@@ -940,16 +940,16 @@ h3 {
   position: static;
   margin-top: 20px;
   width: 100%;
-  text-align: center;
+  
   color: #fff;
 }
 
 
 .home-title {
-  font-family: var(--font-heading);
+  
   font-size: 5rem;
   font-weight: 900;
-  margin-bottom: 20px;
+  
   color: #fff; /* Solid color for banner compatibility */
   text-transform: uppercase;
   letter-spacing: 5px;
@@ -974,7 +974,7 @@ h3 {
   cursor: pointer;
   box-shadow: 0 8px 25px rgba(213, 0, 0, 0.4);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  font-family: var(--font-heading);
+  
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -1035,7 +1035,7 @@ h3 {
   padding: 40px;
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  
   width: 100%;
   max-width: 400px;
   border: 1px solid rgba(255, 255, 255, 0.9);
@@ -1050,7 +1050,7 @@ h3 {
 }
 
 .login-box p {
-  margin-bottom: 20px;
+  
   color: #666;
 }
 
@@ -1082,7 +1082,7 @@ h3 {
   border-radius: 10px;
   color: white;
   font-size: 1.1rem;
-  font-weight: 600;
+  
   cursor: pointer;
   transition: transform 0.2s;
 }
@@ -1092,7 +1092,7 @@ h3 {
 }
 
 .error-message {
-  color: #ff4081;
+  
   margin-top: 10px;
   font-size: 0.9rem;
   min-height: 20px;
@@ -1135,7 +1135,7 @@ h3 {
 }
 
 .admin-content h2 {
-  margin-bottom: 20px;
+  
   color: #333;
   border-bottom: 2px solid #f0f0f0;
   padding-bottom: 10px;
@@ -1155,14 +1155,14 @@ h3 {
 }
 
 .form-group {
-  margin-bottom: 20px;
+  
   text-align: left;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 8px;
-  font-weight: 600;
+  
   color: #555;
 }
 
@@ -1201,11 +1201,11 @@ h3 {
   border: 2px dashed #ffafbd;
   border-radius: 10px;
   padding: 20px;
-  text-align: center;
+  
   cursor: pointer;
   transition: background 0.3s;
   background: #fff0f5;
-  margin-bottom: 20px;
+  
 }
 
 .drop-zone:hover,
@@ -1238,7 +1238,7 @@ h3 {
 }
 
 /* Memories Page Scrolling */
-#page-3 { padding-top: 120px !important;
+#page-3 { padding-top: 200px !important;
   overflow-y: auto !important;
   max-height: 100vh;
   padding-bottom: 150px;
@@ -1277,7 +1277,7 @@ h3 {
   margin-top: 10px;
   font-size: 0.9rem;
   color: #555;
-  font-weight: 600;
+  
 }
 
 
@@ -1391,10 +1391,10 @@ h3 {
 }
 
 .memory-quote {
-  font-family: var(--font-heading);
+  
   font-size: 1.1rem;
   color: #555;
-  text-align: center;
+  
   font-style: italic;
   line-height: 1.4;
 }
@@ -1602,7 +1602,7 @@ h3 {
   cursor: pointer;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
   transition: box-shadow 0.3s ease;
-  font-family: var(--font-heading);
+  
   text-transform: uppercase;
   letter-spacing: 2px;
   /* Keep transition separate for No button to make movement instant but hover smooth */
@@ -1651,16 +1651,16 @@ h3 {
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   z-index: 50;
   animation: gentleFloat 4s ease-in-out infinite;
-  text-align: center;
+  
   max-width: 90%;
   pointer-events: none;
 }
 
 .wishing-banner p {
   margin: 0;
-  font-family: var(--font-heading);
+  
   font-size: 1.4rem;
-  color: #ff4081;
+  
   font-style: italic;
 }
 
@@ -1680,12 +1680,14 @@ h3 {
 }
 /* Cake Name Tag */
 .cake-name-tag {
-  font-family: var(--font-heading);
-  font-size: 1.8rem;
-  color: #ff4081;
-  margin-bottom: 20px;
-  font-weight: 600;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  animation: fadeInDown 1s ease-out;
-  text-align: center;
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  white-space: nowrap;
+  font-size: 1.2rem !important;
+  color: #fff !important;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+  font-weight: bold;
 }
