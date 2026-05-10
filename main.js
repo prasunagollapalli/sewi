@@ -180,6 +180,17 @@ document.addEventListener('DOMContentLoaded', () => {
     currentUserConfig = user;
     currentMemories = user.memories ? user.memories.map(m => m.image_url) : [];
 
+    // Apply Salutation and Wishing Banner
+    const displaySalutation = document.getElementById('display-salutation');
+    if (displaySalutation) displaySalutation.innerText = user.salutation || 'For My Dearest Friend';
+
+    const wishingBanner = document.getElementById('receiver-wishing-banner');
+    const wishBannerText = document.getElementById('wish-banner-text');
+    if (wishingBanner && wishBannerText) {
+        wishBannerText.innerText = user.wish_banner_message || 'Best Wishes!';
+        wishingBanner.classList.remove('hidden');
+    }
+
     applyConfig();
 
     // Auto Play Music
@@ -442,6 +453,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (relationEl) relationEl.value = user.relation || "partner";
+    document.getElementById('config-salutation').value = user.salutation || 'For My Dearest Friend';
+    document.getElementById('config-wish-banner').value = user.wish_banner_message || 'Best Wishes!';
     document.getElementById('config-from-name').value = user.from_name || defaultUserConfig.fromName;
     document.getElementById('config-to-name').value = user.to_name || defaultUserConfig.toName;
     document.getElementById('config-message').value = user.message || defaultUserConfig.message;
@@ -525,7 +538,9 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Update User Config Object
       const updates = {
-        id: user.id,
+        ...currentUserConfig,
+        salutation: document.getElementById('config-salutation').value,
+        wish_banner_message: document.getElementById('config-wish-banner').value,
         receiver_username: document.getElementById('config-receiver-username').value,
         receiver_password: document.getElementById('config-receiver-password').value,
         relation: document.getElementById('config-relation').value,

@@ -1624,3 +1624,44 @@ h3 {
   .cake { width: 180px !important; height: 140px !important; }
   .envelope-container { width: 220px !important; height: 150px !important; }
 }
+/* Floating Wishing Banner */
+.wishing-banner {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  padding: 15px 30px;
+  border-radius: 50px;
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  z-index: 50;
+  animation: gentleFloat 4s ease-in-out infinite;
+  text-align: center;
+  max-width: 90%;
+  pointer-events: none;
+}
+
+.wishing-banner p {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  color: #ff4081;
+  font-style: italic;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -15px); }
+}
+
+@media (max-width: 768px) {
+  .wishing-banner {
+    top: 10%;
+    padding: 10px 20px;
+  }
+  .wishing-banner p {
+    font-size: 1.1rem;
+  }
+}

@@ -36,6 +36,9 @@
     <div id="login-overlay" class="login-overlay hidden">
       <div id="welcome-logo" class="welcome-logo">SeWi</div>
       <h1 id="welcome-title" class="welcome-title" style="cursor: pointer;">SeWi: The Secret Wisher</h1>
+      <div id="receiver-wishing-banner" class="wishing-banner hidden">
+          <p id="wish-banner-text">Best Wishes!</p>
+      </div>
       <div class="login-box">
         <h2>Welcome</h2>
         <p>Please enter your credentials to access the site.</p>
@@ -100,6 +103,14 @@
           </div>
 
           <div id="receiver-stats"></div>
+          <div class="form-group">
+            <label>Salutation (First Page Title):</label>
+            <input type="text" id="config-salutation" placeholder="E.g., For My Dearest Friend">
+          </div>
+          <div class="form-group">
+            <label>Floating Wishing Message:</label>
+            <input type="text" id="config-wish-banner" placeholder="E.g., Have a wonderful day!">
+          </div>
           <div class="form-group">
             <label>Receiver Name:</label>
             <input type="text" id="config-from-name" placeholder="E.g., John">
@@ -228,7 +239,7 @@
               <div class="envelope-from-name" id="envelope-from-name"></div>
               <div class="letter">
                 <div class="text">
-                  <p>Dear Friend,</p>
+                  <h2 id="display-salutation">For My Dearest Friend</h2>
                   <p>I wanted to tell you...</p>
                   <p><strong>(Click to read)</strong></p>
                 </div>
