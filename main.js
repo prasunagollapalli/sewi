@@ -182,7 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Apply Salutation and Wishing Banner
     const displaySalutation = document.getElementById('display-salutation');
-    if (displaySalutation) displaySalutation.innerText = user.salutation || 'For My Dearest Friend';
+    const heroSalutation = document.getElementById('hero-salutation');
+    const salutationText = user.salutation || 'For My Dearest Friend';
+    
+    if (displaySalutation) displaySalutation.innerText = salutationText;
+    if (heroSalutation) heroSalutation.innerText = salutationText;
 
     const wishingBanner = document.getElementById('receiver-wishing-banner');
     const wishBannerText = document.getElementById('wish-banner-text');
@@ -255,7 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('currentUserName', userFound.sender_username);
         checkAuth();
       } else {
-        // Automatically register new sender if not found (optional, or just error)
+        // Confirm before creating new account
+        if (!confirm(`Username "${username}" not found. Would you like to create a new account?`)) {
+            return;
+        }
+        
         try {
             const newUser = {
                 sender_username: username,
