@@ -195,9 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
         wishingBanner.classList.remove('hidden');
     }
 
-    // Apply Cake Name Tag
-    const cakeNameTag = document.getElementById('cake-name-tag');
-    if (cakeNameTag) cakeNameTag.innerText = `To: ${user.to_name || 'My Dearest'}`;
 
     applyConfig();
 
@@ -771,7 +768,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hero title is now handled by salutation in loadUserAndPlay
 
-    // Envelope From Name is now removed for a cleaner look
+    // Update Envelope From Name
+    const envelopeFromEl = document.getElementById('envelope-from-name');
+    if (envelopeFromEl) {
+      envelopeFromEl.innerText = `From: ${currentUserConfig.from_name}`;
+    }
 
     // Apply Background Theme
     const bgAnimation = document.querySelector('.background-animation');
